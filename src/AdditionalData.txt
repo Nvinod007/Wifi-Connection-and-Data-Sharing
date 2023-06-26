@@ -1,0 +1,193 @@
+
+Measurements of Decibels per milliwatt (dBm) dBm display as negative numbers on a scale from -30 to -90. Check out this article about understanding the dBm scale and what a good Wi-Fi signal should be.https://www.screenbeam.com/wifihelp/wifibooster/how-to-check-your-wi-fi-signal-strength/
+
+https://eyenetworks.no/en/wifi-signal-strength/
+
+What does Wi-Fi signal level mean?
+The signal strength is the wireless signal power level received by the wireless client. Strong signal strength results in more reliable connections and higher speeds. Signal strength is represented in -dBm format (0 to -100). This is the power ratio in decibels (dB) of the measured power referenced to one milliwatt.
+
+// connected wifi data
+{
+  "index": 0, 
+  "item": {
+    "BSSID": "00:13:10:85:fe:01",
+    "SSID": "AndroidWifi", 
+    "capabilities": "[ESS]",
+    "frequency": 2447, "level": -50, "timestamp": 7652270015
+  },
+  "separators": { 
+    "highlight": [Function highlight],
+    "unhighlight": [Function unhighlight],
+    "updateProps": [Function updateProps] 
+  }
+}
+
+
+// avail wifi data 
+{"BSSID": "c4:41:1e:c9:8d:b4",
+ "SSID": "Training Room 1_5GHz",
+  "capabilities": "[ESS][WPS]",
+  "frequency": 5180,
+  "level": -73,
+  "timestamp": 1217184863927
+  }
+
+{"BSSID": "a6:2a:37:9c:0a:94",
+ "SSID": "Mi Note 8 Pro ",
+ "capabilities": "[WPA2-PSK-CCMP][RSN-PSK-CCMP][ESS]",
+ "frequency": 2432, 
+ "level": -40, 
+ "timestamp": 1217187311745}
+
+{
+import React, { useEffect, useState } from 'react';
+import { View, Text } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
+
+const App: React.FC = () => {
+  const [networkInfo, setNetworkInfo] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchNetworkInfo = async () => {
+      try {
+        const netInfo = await NetInfo.fetch();
+        setNetworkInfo(netInfo);
+        console.log('Network Info:', netInfo);
+      } catch (error) {
+        console.log('Error:', error);
+      }
+    };
+
+    fetchNetworkInfo();
+  }, []);
+
+  return (
+    <View>
+      <Text>Network Info:</Text>
+      {networkInfo && (
+        <View>
+          <Text>Is Connected: {networkInfo.isConnected.toString()}</Text>
+          <Text>Connection Type: {networkInfo.type}</Text>
+          <Text>IP Address: {networkInfo.details.ipAddress}</Text>
+          <Text>Subnet Mask: {networkInfo.details.subnet}</Text>
+        </View>
+      )}
+    </View>
+  );
+};
+
+export default App;
+ LOG  Network Info: {"details": {"carrier": "T-Mobile", "isConnectionExpensive": true}, "isConnected": true, "isInternetReachable": false, "isWifiEnabled": false, "type": "cellular"}
+info Reloading app...
+ BUNDLE  ./index.js
+
+ LOG  Running "wifi2" with {"rootTag":81}
+ LOG  Network Info: {"details": {"bssid": "02:00:00:00:00:00", "frequency": 2447, "ipAddress": "10.0.2.16", "isConnectionExpensive": false, "linkSpeed": 1, "rxLinkSpeed": 2, "strength": 99, "subnet": "255.255.255.0", "txLinkSpeed": 1}, "isConnected": true, "isInternetReachable": false, "isWifiEnabled": true, "type": "wifi"}
+}
+
+{
+  const wifiState = await NetInfo.fetch();
+  console.log('wifiState in connectWifi', wifiState)
+example output
+  wifiState in connectWifi {"details": {"bssid": "c2:94:ad:c8:6b:ac", "frequency": 5260, "ipAddress": "192.168.1.4", "isConnectionExpensive": false, "linkSpeed": 866, "rxLinkSpeed": 24, "ssid": "VARSHITH GROUND ", "strength": 79, "subnet": "255.255.255.0", "txLinkSpeed": 58}, "isConnected": true, "isInternetReachable": true, "isWifiEnabled": true, "type": "wifi"}
+}
+
+{
+  wifi icons 
+  "wifi","wifi-alert","wifi-arrow-down","wifi-arrow-left","wifi-arrow-left-right","wifi-arrow-right","wifi-arrow-up","wifi-arrow-up-down","wifi-cancel","wifi-check","wifi-cog","wifi-lock","wifi-lock-open","wifi-marker","wifi-minus","wifi-off","wifi-plus","wifi-refresh","wifi-remove","wifi-settings","wifi-star","wifi-strength-1","wifi-strength-1-alert","wifi-strength-1-lock","wifi-strength-1-lock-open","wifi-strength-2","wifi-strength-2-alert","wifi-strength-2-lock","wifi-strength-2-lock-open","wifi-strength-3","wifi-strength-3-alert","wifi-strength-3-lock","wifi-strength-3-lock-open","wifi-strength-4","wifi-strength-4-alert","wifi-strength-4-lock","wifi-strength-4-lock-open","wifi-strength-alert-outline","wifi-strength-lock-open-outline","wifi-strength-lock-outline","wifi-strength-off","wifi-strength-off-outline","wifi-strength-outline","wifi-sync",
+}
+
+sender receiver server.
+{
+  sender,receiver 
+
+    import React, { useState } from 'react';
+  import { View, TextInput, Button } from 'react-native';
+  import FileTransfer from 'react-native-file-transfer';
+
+  const SenderScreen = () => {
+    const [textInputValue, setTextInputValue] = useState('');
+
+    const handleSend = () => {
+      // Create a new FileTransfer instance
+      const fileTransfer = new FileTransfer();
+
+      // Convert the text input value to a Blob object
+      const textBlob = new Blob([textInputValue], { type: 'text/plain' });
+
+      // Create a FormData object and append the textBlob
+      const formData = new FormData();
+      formData.append('file', textBlob, 'text.txt');
+
+      // Send the data using FileTransfer's upload method
+      fileTransfer.upload(
+        'http://receiver-url/upload', // Replace with the URL of the ReceiverScreen
+        formData,
+        (error, response) => {
+          if (error) {
+            console.error('Upload failed:', error);
+          } else {
+            console.log('Upload success:', response);
+          }
+        }
+      );
+    };
+
+    return (
+      <View>
+        <TextInput
+          placeholder="Enter text to send"
+          value={textInputValue}
+          onChangeText={setTextInputValue}
+        />
+        <Button title="Send" onPress={handleSend} />
+      </View>
+    );
+  };
+
+  export default SenderScreen;
+
+  import React, { useEffect, useState } from 'react';
+  import { View, Text, Button } from 'react-native';
+  import RNFetchBlob from 'rn-fetch-blob';
+
+  const ReceiverScreen = () => {
+    const [receivedText, setReceivedText] = useState('');
+
+    useEffect(() => {
+      const downloadFile = async () => {
+        try {
+          const response = await RNFetchBlob.fetch(
+            'GET',
+            'http://sender-url/download' // Replace with the URL of the SenderScreen
+          );
+          
+          const text = await response.text();
+          setReceivedText(text);
+        } catch (error) {
+          console.error('Download failed:', error);
+        }
+      };
+
+      downloadFile();
+    }, []);
+
+    return (
+      <View>
+        <Text>Received Text:</Text>
+        <Text>{receivedText}</Text>
+      </View>
+    );
+  };
+
+  export default ReceiverScreen;
+
+}
+
+Analysis
+{
+  [{"BSSID": "ce:04:1b:a7:59:87", "SSID": "iQOO 9 SE", "capabilities": "[WPA2-PSK-CCMP][RSN-PSK+SAE-CCMP][ESS]", "frequency": 5745, "level": -43, "timestamp": 402706953507}, {"BSSID": "c6:85:7d:10:60:2f", "SSID": "realme 6", "capabilities": "[WPA2-PSK-CCMP][RSN-PSK-CCMP][ESS]", "frequency": 2427, "level": -45, "timestamp": 402706953522}, {"BSSID": "e6:55:b8:12:40:35", "SSID": "CAR-Global", "capabilities": "[WPA2-EAP-CCMP][RSN-EAP-CCMP][ESS]", "frequency": 5180, "level": -46, "timestamp": 
+  402706953492}, {"BSSID": "e2:55:b8:12:40:35", "SSID": "Test-CAR-GUEST", "capabilities": "[ESS]", "frequency": 5180, "level": -46, "timestamp": 402706953496}, {"BSSID": "9e:96:43:fd:44:7f", "SSID": "Kiruthi", "capabilities": "[WPA2-PSK-CCMP][RSN-PSK-CCMP][ESS]", "frequency": 2437, "level": -46, "timestamp": 402706953510}, {"BSSID": "da:55:b8:12:40:35", "SSID": "(hidden SSID)", "capabilities": "[WPA2-EAP][RSN-EAP][ESS]", "frequency": 5180, "level": -46, "timestamp": 402705600555}, {"BSSID": "12:70:ac:dd:50:63", "SSID": "realme X3", "capabilities": "[WPA2-PSK-CCMP][RSN-PSK-CCMP][ESS]", "frequency": 5805, "level": -47, "timestamp": 402706953517}, {"BSSID": "86:a4:25:dd:9c:93", "SSID": "(hidden SSID)", "capabilities": "[WPA2-PSK-CCMP][RSN-PSK+SAE-CCMP][ESS]", "frequency": 5745, "level": -66, "timestamp": 402706542348}, {"BSSID": "0c:cf:89:45:67:22", "SSID": "MIFI_6722", "capabilities": "[WPA2-PSK-CCMP][RSN-PSK-CCMP][ESS]", "frequency": 2452, "level": -68, "timestamp": 402706953520}, {"BSSID": "c4:41:1e:c9:8d:b4", "SSID": "Training Room 1_5GHz", "capabilities": "[ESS][WPS]", "frequency": 5180, "level": -69, "timestamp": 402706953481}, {"BSSID": "c4:41:1e:c9:93:8c", "SSID": "Training Room 2", "capabilities": "[ESS][WPS]", "frequency": 2472, "level": -69, "timestamp": 402706953527}, {"BSSID": "c4:41:1e:c9:8d:b3", "SSID": "Training Room 1", "capabilities": "[ESS][WPS]", "frequency": 2447, "level": -69, "timestamp": 402706953534}, {"BSSID": "e6:55:b8:12:41:37", "SSID": "CAR-Global", "capabilities": "[WPA2-EAP-CCMP][RSN-EAP-CCMP][ESS]", "frequency": 5745, "level": -71, "timestamp": 402706953500}, {"BSSID": "e2:55:b8:12:41:37", "SSID": "Test-CAR-GUEST", "capabilities": "[ESS]", "frequency": 5745, "level": -71, "timestamp": 402706953504}, {"BSSID": "da:55:b8:12:41:37", "SSID": "(hidden SSID)", "capabilities": "[WPA2-EAP][RSN-EAP][ESS]", "frequency": 5745, "level": -71, "timestamp": 402706521782}, {"BSSID": "c4:41:1e:c9:93:8d", "SSID": "Training Room 2_5GHz", "capabilities": "[ESS][WPS]", "frequency": 5240, "level": -71, "timestamp": 402706953514}, {"BSSID": "6a:ed:50:c4:17:e3", "SSID": "vivo Y15s", "capabilities": "[WPA2-PSK-CCMP][RSN-PSK-CCMP][ESS]", "frequency": 2467, "level": -71, "timestamp": 402706953524}, {"BSSID": "1e:43:71:09:b0:1f", "SSID": 
+  "iQOO 9 SE", "capabilities": "[WPA2-PSK-CCMP][RSN-PSK-CCMP][ESS]", "frequency": 2462, "level": -71, "timestamp": 
+  402706953532}, {"BSSID": "66:f0:fb:39:70:5f", "SSID": "Device ", "capabilities": "[WPA2-PSK-CCMP][RSN-PSK-CCMP][ESS]", "frequency": 2412, "level": -73, "timestamp": 402706953529}]
+}
